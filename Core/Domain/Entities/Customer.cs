@@ -1,4 +1,6 @@
 ﻿using Domain.Bases;
+using Domain.Constants;
+using Domain.Exceptions;
 using Domain.Interfaces;
 namespace Domain.Entities
 {
@@ -88,7 +90,7 @@ namespace Domain.Entities
         {
             foreach (CustomerContact contact in CustomerContacts)
             {
-                
+
             }
             SetAsDeleted();
             SetAudit(userId);
@@ -113,7 +115,111 @@ namespace Domain.Entities
             string? website
             )
         {
-            
+            if (CustomerContacts.Any(x => string.Equals(x.FirstName.Trim(), firstName.Trim(), StringComparison.OrdinalIgnoreCase)
+                && string.Equals(x.LastName.Trim(), lastName.Trim(), StringComparison.OrdinalIgnoreCase)))
+            {
+                throw new DomainException($"{ExceptionConsts.EntitiyAlreadyExists}: {firstName} {lastName}");
+            }
+            if (CustomerContacts.Any(x => string.Equals(x.Email.Trim(), email.Trim(), StringComparison.OrdinalIgnoreCase)))
+            {
+                throw new DomainException($"{ExceptionConsts.EntitiyAlreadyExists}: {email}");
+            }
+
+            var customerContact = new CustomerContact(
+                userId,
+                this.Id,
+                firstName,
+                lastName,
+                genderId,
+                description,
+                jobTitle,
+                mobilePhone,
+                socialMedia,
+                address,
+                city,
+                stateOrProvince,
+                zipCode,
+                country,
+                phone,
+                email,
+                website);
+            CustomerContacts.Add(customerContact);
+
+            return customerContact;
+        }
+
+        public CustomerContact UpdateContact(
+            string? userId,
+            string customerContactId,
+            string firstName,
+            string lastName,
+            string jobTitle,
+            string genderId,
+            string email,
+            string? description,
+            string? mobilePhone,
+            string? socialMedia,
+            string? address,
+            string? city,
+            string? stateOrProvince,
+            string? zipCode,
+            string? country,
+            string phone,
+            string? website
+        )
+        {
+            var customerContact = CustomerContacts.SingleOrDefault(x => x.Id == customerContactId.Trim())
+                ?? throw new DomainException($"{ExceptionConsts.EntitiyNotFound}: {customerContactId}");
+
+            if (CustomerContacts.Any(x => string.Equals(x.FirstName.Trim(), firstName.Trim(), StringComparison.OrdinalIgnoreCase)
+                && string.Equals(x.LastName.Trim(), lastName.Trim(), StringComparison.OrdinalIgnoreCase)
+                && x.Id != customerContactId))
+            {
+                throw new DomainException($"{ExceptionConsts.EntitiyAlreadyExists}: {firstName} {lastName}");
+            }
+            if (CustomerContacts.Any(x => string.Equals(x.Email.Trim(), email.Trim(), StringComparison.OrdinalIgnoreCase)
+                && x.Id != customerContactId))
+            {
+                throw new DomainException($"{ExceptionConsts.EntitiyAlreadyExists}: {email}");
+            }
+
+            customerContact.Update(
+                userId,
+                this.Id,
+                firstName,
+                lastName,
+                genderId,
+                description,
+                jobTitle,
+                mobilePhone,
+                socialMedia,
+                address,
+                city,
+                stateOrProvince,
+                zipCode,
+                country,
+                phone,
+                email,
+                website);
+
+            return customerContact;
+        }
+
+        public CustomerContact DeleteContact(string? userId, string customerContactId)
+        {
+            var customerContact = CustomerContacts.SingleOrDefault(x => x.Id == customerContactId.Trim())
+                ?? throw new DomainException($"{ExceptionConsts.EntitiyNotFound}: {customerContactId}");
+            customerContact.Delete(userId);
+
+            return customerContact;
+        }
+
+        public CustomerContact GetContact(string customerContactId)
+        {
+            var customerContact = CustomerContacts.SingleOrDefault(x => x.Id == customerContactId.Trim())
+                ?? throw new DomainException($"{ExceptionConsts.EntitiyNotFound}: {customerContactId}");
+
+            return customerContact;
         }
     }
 }
