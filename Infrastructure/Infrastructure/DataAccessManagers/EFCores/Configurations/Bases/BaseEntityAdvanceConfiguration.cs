@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.DataAccessManagers.EFCores.Configurations.Bases
 {
-    public abstract class BaseEntityCommonConfiguration<T> : IEntityTypeConfiguration<T> where T : BaseEntityCommon
+    public class BaseEntityAdvanceConfiguration<T> : IEntityTypeConfiguration<T> where T : BaseEntityAdvance
     {
         public virtual void Configure(EntityTypeBuilder<T> builder)
         {
@@ -43,13 +43,20 @@ namespace Infrastructure.DataAccessManagers.EFCores.Configurations.Bases
                 .HasForeignKey(e => e.UpdatedById)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            //BaseEntityCommon
+            //BaseEntityAdvance
+            builder.Property(e => e.Code)
+                .IsRequired()
+                .HasMaxLength(CodeConsts.MaxLength);
+
             builder.Property(e => e.Name)
                 .IsRequired()
                 .HasMaxLength(NameConsts.MaxLength);
 
             builder.Property(e => e.Description)
                 .HasMaxLength(DescriptionConsts.MaxLength);
+
+            builder.HasIndex(e => e.Code)
+                .HasDatabaseName($"IX_{typeof(T).Name}_Code");
 
             builder.HasIndex(e => e.Name)
                 .HasDatabaseName($"IX_{typeof(T).Name}_Name");

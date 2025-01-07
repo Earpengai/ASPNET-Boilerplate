@@ -1,5 +1,6 @@
 ﻿using Application.Services.CQS;
 using Domain.Entities;
+using Infrastructure.DataAccessManagers.EFCores.Configurations;
 using Infrastructure.SecurityManagers.AspNetIdentity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -28,8 +29,23 @@ namespace Infrastructure.DataAccessManagers.EFCores.Contexts
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            
 
+            //modelBuilder.ApplyConfiguration(new ApplicationUserConfiguration());
+            builder.ApplyConfiguration(new GenderConfiguration());
+            builder.ApplyConfiguration(new NumberSequenceConfiguration());
+            builder.ApplyConfiguration(new TokenConfiguration());
+            builder.ApplyConfiguration(new ConfigConfiguration());
+            builder.ApplyConfiguration(new CurrencyConfiguration());
+            builder.ApplyConfiguration(new CustomerConfiguration());
+            builder.ApplyConfiguration(new CustomerContactConfiguration());
+            builder.ApplyConfiguration(new CustomerGroupConfiguration());
+            builder.ApplyConfiguration(new CustomerSubGroupConfiguration());
+            builder.ApplyConfiguration(new FileDocConfiguration());
+            builder.ApplyConfiguration(new FileImageConfiguration());
+            builder.ApplyConfiguration(new VendorConfiguration());
+            builder.ApplyConfiguration(new VendorContactConfiguration());
+            builder.ApplyConfiguration(new VendorGroupConfiguration());
+            builder.ApplyConfiguration(new VendorSubGroupConfiguration());
         }
     }
 }

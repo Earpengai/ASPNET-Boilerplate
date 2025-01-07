@@ -6,11 +6,11 @@ namespace Domain.Entities
     public class Config : BaseEntityCommon, IAggregateRoot
     {
         public string CurrencyId { get; set; } = null!;
-        public string SmptHost { get; set; } = null!;
-        public int SmptPort { get; set; }
-        public string SmptUserName { get; set; } = null!;
-        public string SmptPassword { get; set; } = null!;
-        public string SmptUseSsl { get; set; } = null!;
+        public string SmtpHost { get; set; } = null!;
+        public int SmtpPort { get; set; }
+        public string SmtpUserName { get; set; } = null!;
+        public string SmtpPassword { get; set; } = null!;
+        public string SmtpUseSsl { get; set; } = null!;
         public bool Active { get; set; }
 
         public Config() : base() { } // For EF
@@ -29,11 +29,11 @@ namespace Domain.Entities
             ) : base(userId, name, description)
         {
             CurrencyId = currencyId.Trim();
-            SmptHost = smptHost.Trim();
-            SmptPort = smptPort;
-            SmptUserName = smptUserName.Trim();
-            SmptPassword = smptPassword.Trim();
-            SmptUseSsl = smptUseSsl.Trim();
+            SmtpHost = smptHost.Trim();
+            SmtpPort = smptPort;
+            SmtpUserName = smptUserName.Trim();
+            SmtpPassword = smptPassword.Trim();
+            SmtpUseSsl = smptUseSsl.Trim();
             Active = active;
         }
 
@@ -53,14 +53,14 @@ namespace Domain.Entities
             Name = name.Trim();
             Description = description?.Trim();
             CurrencyId = currencyId.Trim();
-            SmptHost = smptHost.Trim();
-            SmptPort = smptPort;
-            SmptUserName = smptUserName.Trim();
+            SmtpHost = smptHost.Trim();
+            SmtpPort = smptPort;
+            SmtpUserName = smptUserName.Trim();
             if (!string.IsNullOrEmpty(smptPassword?.Trim())) 
             {
-                SmptPassword = smptPassword!.Trim();
+                SmtpPassword = smptPassword!.Trim();
             }
-            SmptUseSsl = smptUseSsl.ToString();
+            SmtpUseSsl = smptUseSsl.ToString();
             Active = active;
 
             SetAudit(userId);

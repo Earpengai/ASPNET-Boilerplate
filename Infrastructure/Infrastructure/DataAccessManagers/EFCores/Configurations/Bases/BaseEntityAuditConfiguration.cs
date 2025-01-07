@@ -2,13 +2,12 @@
 using Domain.Constants;
 using Infrastructure.SecurityManagers.AspNetIdentity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.DataAccessManagers.EFCores.Configurations.Bases
 {
-    public abstract class BaseEntityCommonConfiguration<T> : IEntityTypeConfiguration<T> where T : BaseEntityCommon
+    public abstract class BaseEntityAuditConfiguration<T> : IEntityTypeConfiguration<T> where T : BaseEntityAudit
     {
-        public virtual void Configure(EntityTypeBuilder<T> builder)
+        public virtual void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<T> builder)
         {
             //BaseEntity
             builder.HasKey(e => e.Id);
@@ -42,17 +41,6 @@ namespace Infrastructure.DataAccessManagers.EFCores.Configurations.Bases
                 .WithMany()
                 .HasForeignKey(e => e.UpdatedById)
                 .OnDelete(DeleteBehavior.Restrict);
-
-            //BaseEntityCommon
-            builder.Property(e => e.Name)
-                .IsRequired()
-                .HasMaxLength(NameConsts.MaxLength);
-
-            builder.Property(e => e.Description)
-                .HasMaxLength(DescriptionConsts.MaxLength);
-
-            builder.HasIndex(e => e.Name)
-                .HasDatabaseName($"IX_{typeof(T).Name}_Name");
         }
     }
 }
